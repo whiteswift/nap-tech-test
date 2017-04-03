@@ -1,0 +1,103 @@
+<div>
+
+    <div class='facets'>
+        <div>
+          Facets
+        </div>
+    </div>
+
+    <div id='products'></div>
+    <div id='toast'></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            getProducts();
+            monitorNetworkConnection();
+        }, false);
+        
+        function getProducts() {
+            fetch('http://127.0.0.1:3000/api/products')
+            .then((response) => {
+                return response.json();
+            })
+            .then((productList) => {
+                let productsListNode = document.getElementById('products');
+
+                productList.data.forEach((productData, index) => {
+                    productsListNode.innerHTML += 
+                    `<div class="product" id=${productData.id}>
+                        <div class="product__image">
+                            <img src="${productData.image.outfit}" data-image data-outfit="${productData.image.outfit}" />
+                        </div>
+                        <div class="product__designer">${productData.designer}</div>
+                        <div class="product__product-name">${productData.name}</div>
+                        <div class="product__price">${productData.price}</div>
+                    </div>`;
+                })
+            })
+            .catch((err) => {
+                checkNetoworkConnection()
+                console.log('ERROR:', err);
+            })
+            .then(() => {
+                [].forEach.call(document.getElementsByClassName('product__image'), function(element) {
+                    element.addEventListener('mouseover', function(){ productMouseover(this); });
+                    element.addEventListener('mouseleave', function(){ productLeaveMouseover(this); });
+                });
+            });
+        }
+        
+        function productMouseover(element) {
+            let imageURL = element.children[0].src
+            let splitURL = imageURL.split('_');
+
+            splitURL[1] = 'in';
+            splitURL[2] = 'pp';
+            let outfitURL = splitURL.join('_');
+            outfitURL += '.jpg';
+
+            element.children[0].src = outfitURL;
+            // element.children[0].dataset.image = 
+        }
+
+        function productLeaveMouseover(element) {
+            element.children[0].src = element.children[0].dataset.outfit;
+        }
+
+        // NETWORKY //
+        function monitorNetworkConnection() { // Android and Mobile Chrome browsers only
+            let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            
+            try {
+                let type = connection.type;
+                connection.addEventListener('typechange', showConnectionStatus);
+            }
+            catch(err) {
+                console.log(err);
+            }
+            
+        }
+
+        function checkNetoworkConnection() {
+            if (!navigator.onLine) {
+                showConnectionStatus('offline');
+            }
+        }
+
+        function showConnectionStatus(status) {
+            let toastElement = document.getElementById("toast")
+            let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            let connectionStatus = status ? status : connection.type;
+
+            toastElement.innerHTML = `You are ${connectionStatus}`;
+            toastElement.className = "show";
+
+            console.log(`Connection type is ${connectionStatus}`);
+
+            setTimeout(function() { 
+                toastElement.className = toastElement.className.replace("show", "");
+            }, 3000);
+        }
+                
+    </script>
+</div>

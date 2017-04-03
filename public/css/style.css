@@ -1,0 +1,82 @@
+h1 {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: normal;
+    letter-spacing: 2px;
+}
+
+img {
+    outline: none;
+}
+
+
+ /* Product */
+#products {
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.product {
+  margin: 18px auto;
+}
+
+.product__image {
+  height: 45vw;     /* 2:3 ratio */
+  width: 30vw;
+  background: #eee;
+  margin: 0 0 0.5em;
+}
+
+.product__image > img {
+  width: inherit;
+}
+
+.product__designer {
+  font-weight: bold;
+}
+
+.product__product-name {
+
+}
+
+.product__price {
+
+}
+
+.product--sale-yes {
+
+}
+
+/* Toast notification */
+
+#toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+#toast.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
